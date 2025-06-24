@@ -1,0 +1,11 @@
+for i in `cat INDS`; \
+do echo $i; \
+sbatch --account=WagnerLab \
+--output=/project/WagnerLab/jrick/msmc_Sept2017/outs/stdout_${IND}_msmc2_MEGA_nomask.gatk \
+--error=/project/WagnerLab/jrick/msmc_Sept2017/outs/stderr_${IND}_msmc2_MEGA_nomask.gatk \
+--nodes=1 \
+--ntasks-per-node=1 \
+--time=0-1:00:00 \
+--mail-type=END \
+msmc_2_generateInput_singleInd_filter.sh $i `echo phased`; \
+done

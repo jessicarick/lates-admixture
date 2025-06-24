@@ -1,0 +1,8 @@
+sbatch --account=WagnerLab \
+--mail-type=END \
+--output=/project/WagnerLab/jrick/msmc_Sept2017/outs/stdout_msmc1gatk_mega \
+--error=/project/WagnerLab/jrick/msmc_Sept2017/outs/stderr_msmc1gatk_mega \
+--nodes=1 \
+--ntasks-per-node=16 \
+--time=1-01:00:00 \
+msmc_1_call_gatk.sh `echo phased`
