@@ -12,7 +12,7 @@ module load gcc bwa samtools
 fastq1=$1
 fastq2=$2
 info=$3
-genome=/project/latesgenomics/reference_genomes/Lates_calcarifer/lcalcarifer_genome_v3_chromosomal.fa
+genome=reference_genomes/Lates_calcarifer/lcalcarifer_genome_v3_chromosomal.fa
 
 id=$(basename $fastq1 .trimmomatic_1P.fastq)
 
@@ -32,7 +32,7 @@ echo "Converting sam to bam for $id"
 samtools view -b -S -@ 16 -o aln_${id}.trimmomatic.bam aln_${id}.trimmomatic.sam
 rm -f aln_${id}.trimmomatic.sam
 
-echo "Sorting and indexing bam files for $id"
+echo "Sorting bam files for $id"
 samtools sort -@ 16 aln_${id}.trimmomatic.bam -o aln_${id}.trimmomatic.sorted.bam
 #samtools index -@ 16 aln_${id}.trimmomatic.sorted.bam
 
