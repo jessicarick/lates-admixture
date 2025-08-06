@@ -20,6 +20,6 @@ chr=${chr_list[$SLURM_ARRAY_TASK_ID]}
 vcftools --gzvcf $vcf --chr $chr --recode --out ${chr}.tmp
 
 echo "starting split_vcf_coord.sh script for $chr; vcf is $vcf"
-./split_vcf_coord.sh ${chr}.tmp.recode.vcf $chr $nbp
+./scripts/split_vcf_coord.sh ${chr}.tmp.recode.vcf $chr $nbp
 
 date
