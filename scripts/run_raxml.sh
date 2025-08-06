@@ -20,5 +20,5 @@ SEED=`date +%N | sed -e 's/000$//' -e 's/^0//'` #sets seed based on clock
 
 raxmlHPC-PTHREADS-AVX -s $PHYLIP -f a -p $SEED -n $OUT -m ASC_GTRGAMMA --asc-corr=lewis -T 32 -x $SEED -N 100
 
-echo "Done RAxMLing!" | mail -s "done wtih $PHYLIP" jrick@uwyo.edu
+echo "Done RAxMLing!" | mail -s "done with $PHYLIP" jrick@uwyo.edu
 date
