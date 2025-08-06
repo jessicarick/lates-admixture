@@ -11,7 +11,7 @@ date
 
 module load gcc ldhelmet samtools bcftools
 
-readarray -t chrom_list < chrom
+readarray -t chrom_list < data/chrom
 chrom=${chrom_list[$SLURM_ARRAY_TASK_ID]}
 iter=$1
 
@@ -40,8 +40,8 @@ for ind in `cat ind_list.txt`
 	cp ${vcf}* .
 	#tabix ${base}.vcf.gz
 
-	samtools faidx /project/latesgenomics/reference_genomes/Lates_calcarifer/lcalcarifer_genome_v3_chromosomal.fa $chrom | bcftools consensus ${base}.vcf.gz -s $ind -H 1 -M "-" | sed "s/^>/>${ind}_hapA_/g" >> ${chrom}.all.fa
-	samtools faidx /project/latesgenomics/reference_genomes/Lates_calcarifer/lcalcarifer_genome_v3_chromosomal.fa $chrom | bcftools consensus ${base}.vcf.gz -s $ind -H 2 -M "-" | sed "s/^>/>${ind}_hapB_/g" >> ${chrom}.all.fa
+	samtools faidx reference_genomes/Lates_calcarifer/lcalcarifer_genome_v3_chromosomal.fa $chrom | bcftools consensus ${base}.vcf.gz -s $ind -H 1 -M "-" | sed "s/^>/>${ind}_hapA_/g" >> ${chrom}.all.fa
+	samtools faidx reference_genomes/Lates_calcarifer/lcalcarifer_genome_v3_chromosomal.fa $chrom | bcftools consensus ${base}.vcf.gz -s $ind -H 2 -M "-" | sed "s/^>/>${ind}_hapB_/g" >> ${chrom}.all.fa
 
 done
 
@@ -68,8 +68,8 @@ echo "done calculating pade coefficients; starting rjmcmc procedure"
 ldhelmet rjmcmc --num_threads 16 -w 100 -l ${chrom}.run${iter}.lik -p ${chrom}.run${iter}.pade -b ${blocks[$iter]} -s ${chrom}.all.fa --burn_in 100000 -n 1000000 -o ${chrom}.run${iter}.post
 
 echo "done with rjcmcm procedure! results were written to ${chrom}.run${iter}.post. now, transferring output back to project account"
-cp ${chrom}* /project/latesgenomics/jrick/admixture/july2020/ldhelmet/ldhelmet_apr23/
+cp ${chrom}* ldhelmet/ldhelmet_apr23/
 cd ../
 tar -zcvf ${SLURM_JOB_ID}_${chrom}_results.tar.gz $SLURM_JOB_ID
-mv ${SLURM_JOB_ID}_${chrom}_results.tar.gz /project/latesgenomics/jrick/admixture/july2020/ldhelmet/ldhelmet_apr23/
+mv ${SLURM_JOB_ID}_${chrom}_results.tar.gz ldhelmet/ldhelmet_apr23/
 rm -rf ${SLURM_JOB_ID}/
