@@ -20,7 +20,7 @@ n_part=1
 
 while [ "$start_bp" -lt "$maxbp" ]; do 
     echo "creating partition $n"
-		vcftools --vcf $vcf --chr $chr --from-bp $start_bp --to-bp $end_bp --recode --out partition_vcfs/latesWGS_2.bamlist.miss0.5_maf0.01.${chr}_${n_part}
+		vcftools --vcf $vcf --chr $chr --from-bp $start_bp --to-bp $end_bp --recode --out partition_vcfs/latesWGS.${chr}_${n_part}
 		start_bp=$((start_bp + nbp))
 		end_bp=$((end_bp + nbp))
 		n_part=$((n_part + 1))
