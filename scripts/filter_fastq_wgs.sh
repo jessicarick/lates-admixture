@@ -27,7 +27,8 @@ date
 
 ##### Usage: ./filter.sh file.fastq
 
-fastq_list=(/project/wagnerlab/data/lates_wgs_data/*trimmomatic_*P.fastq)
+fastq_dir=/project/wagnerlab/data/lates_wgs_data
+fastq_list=${fastq_dir}/*trimmomatic_*P.fastq
 fq=${fastq_list[$SLURM_ARRAY_TASK_ID]}
 
 temp_dir=/gscratch/jrick/fastq_filter
@@ -38,22 +39,22 @@ echo "Filtering ${fq}"
 base=`basename $fq .fastq`
 echo $base
 
-/project/wagnerlab/gbs_resources/scripts/tap_contam_analysis_JAR --db /project/wagnerlab/gbs_resources/contaminants/illumina_oligos --pct 20 $fq > ${temp_dir}/SB.${base}.readstofilter.ill.txt
+scripts/tap_contam_analysis_JAR --db data/contaminants/illumina_oligos --pct 20 $fq > ${temp_dir}/SB.${base}.readstofilter.ill.txt
 
 echo "Illumina filtering done for $base"
 echo "starting PhiX fitlering for $base"
 
-/project/wagnerlab/gbs_resources/scripts/tap_contam_analysis_JAR --db /project/WagnerLab/gbs_resources/contaminants/phix174 --pct 80 $fq > ${temp_dir}/SB.${base}.readstofilter.phix.txt
+ scripts/tap_contam_analysis_JAR --db data/contaminants/phix174 --pct 80 $fq > ${temp_dir}/SB.${base}.readstofilter.phix.txt
 
 echo "PhiX filtering done for $base"
 echo "starting ecoli filtering for $base"
 
-/project/wagnerlab/gbs_resources/scripts/tap_contam_analysis_JAR --db /project/wagnerlab/gbs_resources/contaminants/ecoli-k-12 --pct 80 fq > ${temp_dir}/SB.${base}.readstofilter.ecoli.txt
+scripts/tap_contam_analysis_JAR --db data/contaminants/ecoli-k-12 --pct 80 fq > ${temp_dir}/SB.${base}.readstofilter.ecoli.txt
 
 #echo "ecoli filtering done for $base"
 echo "now creating clean copy of fastq"
 
-cat $fq | /project/wagnerlab/gbs_resources/scripts/fqu_cull -r ${temp_dir}/SB.${base}.readstofilter.ill.txt ${temp_dir}/SB.${base}.readstofilter.phix.txt ${temp_dir}/SB.${base}.readstofilter.ecoli.txt > ${base}.clean.fastq
+cat $fq | scripts/fqu_cull -r ${temp_dir}/SB.${base}.readstofilter.ill.txt ${temp_dir}/SB.${base}.readstofilter.phix.txt ${temp_dir}/SB.${base}.readstofilter.ecoli.txt > ${base}.clean.fastq
 
 echo "Clean copy of fastq done"
 
